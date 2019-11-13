@@ -1,18 +1,23 @@
 package fr.gtm.bovoyage.dto;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
 
+import fr.gtm.bovoyage.entities.DatesVoyage;
 import fr.gtm.bovoyage.entities.Destination;
 
 public class DestinationDTO implements Serializable{
 	private long id;
 	private String region;
 	private String description;
-	
+	private Set<DatesVoyage> dates;
+
 	public DestinationDTO(Destination destination) {
 		this.id = destination.getId();
 		this.region = destination.getRegion();
 		this.description = destination.getDescription();
+		this.dates = destination.getDatesVoyage();
 	}
 	
 	public long getId() {
@@ -37,6 +42,14 @@ public class DestinationDTO implements Serializable{
 	
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public Set<DatesVoyage> getDates() {
+		return dates;
+	}
+
+	public void setDates(Set<DatesVoyage> dates) {
+		this.dates = dates;
 	}
 	
 	

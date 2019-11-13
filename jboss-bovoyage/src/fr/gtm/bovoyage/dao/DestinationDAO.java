@@ -1,30 +1,32 @@
 package fr.gtm.bovoyage.dao;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 import fr.gtm.bovoyage.entities.DatesVoyage;
 import fr.gtm.bovoyage.entities.Destination;
 
-public class DestinationDAO extends AbstractDAO<Destination, Long> {
+@Singleton
+public class DestinationDAO {
+	@PersistenceContext(name="destination") private EntityManager em;
 	
-	public DestinationDAO(EntityManagerFactory emf) {
-		super(emf, Destination.class);
+	public DestinationDAO() {
+		
 	}
 	
-	public List<Destination> getAllDestinations() {
-		EntityManager em = getEntityManagerFactory().createEntityManager();
-		List<Destination> destinations = em.createNamedQuery("Destination.getAllDestinations", Destination.class).getResultList();
-		em.close();
+	public List<Destination> getAllDestinations() {	
+		List<Destination> destinations = em.createNamedQuery("Destination.getAllDestinations", Destination.class).getResultList();		
 		return destinations;
 	}
 	
 	public Set<DatesVoyage> getDatesVoyageByDestinationId(long id){
-		EntityManager em = getEntityManagerFactory().createEntityManager();
 		Destination destination = em.find(Destination.class, id);
 		Set<DatesVoyage> datesVoyage = new HashSet<DatesVoyage>();
 		for (DatesVoyage d : destination.getDatesVoyage()){
@@ -34,11 +36,28 @@ public class DestinationDAO extends AbstractDAO<Destination, Long> {
 	}
 	
 	public void deleteDatesVoyage(long id) {
-		EntityManager em = getEntityManagerFactory().createEntityManager();
-		em.getTransaction().begin();
 		DatesVoyage datesVoyage = em.find(DatesVoyage.class, id);
 		em.remove(datesVoyage);
-		em.getTransaction().commit();
-		em.close();
+	
 	}
+
+	public void deleteDestination(long id) {
+		Destination destination = em.find(Destination.class, id);
+		em.remove(destination);
+	}
+	
+	public List<Destination> addDestination(long id) {
+		List<Destination> destinations = new ArrayList<Destination>();
+		em.persist(destinations);
+		for(Destination destination : addDestination(id)) {
+			destinations.add(destination);
+		}
+		return destinations;
+	}	
+	
+	public void update(Destination destination) {
+		em.merge(destination);
+	}
+
+	
 }
