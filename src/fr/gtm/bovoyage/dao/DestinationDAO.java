@@ -15,7 +15,8 @@ public class DestinationDAO extends AbstractDAO<Destination, Long> {
 	public DestinationDAO(EntityManagerFactory emf) {
 		super(emf, Destination.class);
 	}
-	//co
+	//coucou
+	//2eme essai
 	public List<Destination> getAllDestinations() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		List<Destination> destinations = em.createNamedQuery("Destination.getAllDestinations", Destination.class).getResultList();
